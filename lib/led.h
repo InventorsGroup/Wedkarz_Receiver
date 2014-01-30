@@ -1,6 +1,8 @@
-#include "../config.h"
 #include <avr/io.h> 
+#include <avr/interrupt.h>
 #include <util/delay.h>
+
+#include "../config.h"
 
 
 /*
@@ -30,7 +32,7 @@ Annotation:
 setting any color >0 on led 7 will turn it on
 led 8 takes color for it's brightness
 */
-void led_set(unsigned char n, unsigned char color);
+void led_set(unsigned char n,char color);
 
 /*
 Turns 0-7 leds off (0) and on (1)
@@ -51,18 +53,3 @@ void led_push();
 Clears LEDs 0-7
 */
 void led_clear();
-
-/*
-Clears LEDs 0-5
-*/
-void led_bar_clear();
-
-/*
-Displays LED bar on LEDs 0-5
-n - number of LEDs turned on
-c - color
-dir - direction
-*/
-void led_bar(unsigned char n, unsigned char c, unsigned char dir);
-
-void led_bar2(unsigned char n, unsigned char c, unsigned char dir, unsigned char comet);

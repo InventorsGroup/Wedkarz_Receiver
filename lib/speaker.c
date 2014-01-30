@@ -14,7 +14,7 @@ volatile unsigned char THEFT_ALARM = 0;
 void speaker_init()
 {	
 	//TCCR2B |= (1 << CS22);
-	DDRD |= (1 << PD6);
+	DDRD |= (1 << PD7);
 	TIMSK2 |= (1 << OCIE2A) | (1 << OCIE2B);
 	OCR2A = 1;
 	OCR2B = 2;
@@ -29,7 +29,7 @@ void set_speaker(char state)
 	else if(state == 0)
 	{
 		TCCR2B &= ~(1 << CS22);
-		PORTD &= ~(1 << PD6);
+		PORTD &= ~(1 << PD7);
 		TCNT2 = 0;
 		OCR2A = 1;
 		OCR2B = 2;
@@ -88,11 +88,11 @@ ISR(TIMER2_COMPA_vect)
 	else
 		OCR2A += ACTUAL_FREQ;
 
-		PORTD |= (1 << PD6);
+		PORTD |= (1 << PD7);
 
 }
 
 ISR(TIMER2_COMPB_vect)
 {
-	PORTD &= ~(1 << PD6);
+	PORTD &= ~(1 << PD7);
 }

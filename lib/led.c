@@ -78,8 +78,9 @@ void led_power(unsigned char p)
 }
 
 
-void led_set(unsigned char n, unsigned char color)
+void led_set(unsigned char n, char color)
 {
+	if (color < 0) color = 0;
 	if (n < 4)
 	{
 		switch (color){
@@ -194,38 +195,10 @@ void led_push()
 	}
 	LA_PORT |= (1 << LA);
 	LA_PORT &= ~(1 << LA); // Latch output
-	led_enable(1);
 }
 
 void led_clear()
 {
 	for (int i=0; i<36; i++) leds[i] = 0;
 	led_push();
-}
-
-void led_bar_clear()
-{
-	for (int i = 0; i < 6; i++) led_set(i, 0);
-	led_push();
-}
-
-void led_bar(unsigned char n, unsigned char c, unsigned char dir)
-{
-	led_bar2(n, c, dir, 0);
-}
-
-void led_bar2(unsigned char n, unsigned char c, unsigned char dir, unsigned char comet)
-{
-	volatile int i = 0;
-	led_bar_clear();
-	if (n < 0) n = 0;
-	else if (n > 6) n = 6;
-	for(i = 0; i < n; i++)
-	{	
-	if(comet  == 0 || (comet > 0 && ((n > 4 && (n-4) < i) || n <=4)))
-		if (dir > 0) led_set(5-i, c);
-		else led_set(i, c);
-	}
-	led_push();
-	led_turn_off = 1;
 }
