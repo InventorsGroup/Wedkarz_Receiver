@@ -3,6 +3,11 @@
 	LED Control PINs, PORTs and DDRs
 */
 
+volatile extern unsigned char id_tab[4][3];
+volatile extern unsigned char color[4];
+volatile unsigned extern char device;
+volatile unsigned extern char id_temp[3];
+
 //led drivers
 #define SDI_PORT PORTC	
 #define OE_PORT PORTB

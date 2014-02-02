@@ -5,6 +5,10 @@
 #include "../config.h"
 #include "button.h"
 #include "led.h"
+#include "rfm12.h"
+#include "com.h"
+
+uint8_t losuj();
 
 extern volatile unsigned int t1s;
 extern volatile unsigned int t10s;

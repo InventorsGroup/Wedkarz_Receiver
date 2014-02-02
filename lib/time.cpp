@@ -8,7 +8,15 @@ volatile unsigned int t1s = 0;
 volatile unsigned int t10s = 0;
 volatile unsigned int t500ms = 0;
 volatile int fb_led = -1;
+unsigned int stan_poprzedni=1; //Przy inicjalizacji bedzie to 'seed'
+const unsigned int x=22695477, c=1;
 
+
+uint8_t losuj()
+{
+	stan_poprzedni=(x*stan_poprzedni+c);
+	return stan_poprzedni%257;
+}
 
 void time_init()
 {
@@ -46,6 +54,10 @@ ISR(TIMER0_COMPA_vect)
 				device++;
 				func_timer = 0;
 				if (device > 3 ) device = 0;
+				id_temp[0] = losuj();
+				id_temp[1] = losuj();
+				id_temp[2] = losuj();
+				wait_for_pair = 1;
 			}
 		}
 	}
@@ -66,7 +78,11 @@ ISR(TIMER0_COMPA_vect)
 			func_mode = 1;
 			function = 2;
 		}
-		else func_mode = 0;
+		else 
+		{
+			//tu wjebać zapis do epromu id_tab
+			func_mode = 0;
+		}
 	}
 	
 	
@@ -75,19 +91,27 @@ ISR(TIMER0_COMPA_vect)
 		
 	}
 	
-	if (t500ms == T500MS)
-	{
+	 if (t500ms == T500MS)
+	 {
 		if (func_mode == 1)
 		{
 			fb_led *= -1;
+			send(1);
 		}
+		
 		t500ms = 0;
-	}
+	 }
 	
 	if (func_timer == T10S)
 	{
-		if (func_mode == 1) func_mode =0;
+		if (func_mode == 1)
+		{
+			func_mode =0;
+			wait_for_pair = 0;
+			//tu też wpierdolić zapis do eepromu
+		}
 	}
+
 	
 	led_set(10, func_mode*fb_led);
 	led_push();
@@ -95,5 +119,75 @@ ISR(TIMER0_COMPA_vect)
 	t10s++;
 	t500ms++;
 	func_timer++;
+	
+	if (main_mode == 1) led_set(9,1);
+	else led_set (9,0); 
+	
+	if (main_mode == 2) led_set(7,1);
+	else led_set (7,0); 
+	
+	if (func_mode == 1)
+	{
+		
+		switch (function)
+		{
+			case 0: 
+				led_set(4, 1);
+				led_set(5, 0);
+				led_set(6, 0);
+				break;
+			case 1:
+				led_set(4, 0);
+				led_set(5, 1);
+				led_set(6, 0);
+				break;
+			case 2:
+				led_set(4, 0);
+				led_set(5, 0);
+				led_set(6, 1);
+				break;
+		}
+
+		switch (device)
+		{
+			case 0:
+				
+				led_set(0,color[device]);
+				led_set(1,0);
+				led_set(2,0);
+				led_set(3,0);
+				break;
+			case 1:
+				led_set(0,0);
+				led_set(1,color[device]);
+				led_set(2,0);
+				led_set(3,0);
+				break;
+			case 2:
+				led_set(0,0);
+				led_set(1,0);
+				led_set(2,color[device]);
+				led_set(3,0);
+				break;
+			case 3:
+				led_set(0,0);
+				led_set(1,0);
+				led_set(2,0);
+				led_set(3,color[device]);
+				break;
+		}
+		
+	}
+	else
+	{
+		led_set(4, 0);
+		led_set(5, 0);
+		led_set(6, 0);
+		led_set(0, 0);
+		led_set(1, 0);
+		led_set(2, 0);
+		led_set(3, 0);
+	}
+	
 }
 

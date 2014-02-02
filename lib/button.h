@@ -13,7 +13,7 @@ extern volatile char main_mode;
 volatile extern char func_mode;
 volatile extern char function;
 volatile unsigned extern int func_timer;
-volatile unsigned extern char device;
+
 
 
 void button_init();

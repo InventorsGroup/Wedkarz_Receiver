@@ -7,7 +7,6 @@ volatile char main_mode;
 volatile char func_mode = 0;
 volatile char function = 2;
 volatile unsigned int func_timer;
-volatile unsigned char device = 0; 
 volatile unsigned char pwr;
 
 void button_init()
@@ -69,9 +68,6 @@ ISR(PCINT0_vect)
 
 ISR(PCINT2_vect)
 {
-	
-
-
 	char mask = 0;
 	
 	mask |= (1 << B1) | (1 << B2) | (1 << B4) | (1 << B5) | (1 << B6) | (1 << B7);
@@ -139,4 +135,5 @@ void power_up()
 		sei();
 		main_mode = 0;
 		func_mode = 0;
+		function = 2;
 }

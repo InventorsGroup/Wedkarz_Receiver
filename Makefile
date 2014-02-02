@@ -14,11 +14,13 @@ CLOCK      = 8000000
 PROGRAMMER = -c usbasp -P avrdoper -F
 LIBDIR     = lib
 OBJECTS    = main.o
+OBJECTS    += config.o
 OBJECTS    += $(LIBDIR)/led.o
 OBJECTS    += $(LIBDIR)/button.o
 OBJECTS    += $(LIBDIR)/time.o
 OBJECTS    += $(LIBDIR)/speaker.o
 OBJECTS    += $(LIBDIR)/rfm12.o
+OBJECTS    += $(LIBDIR)/com.o
 
 FUSES      = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xff:m
 
