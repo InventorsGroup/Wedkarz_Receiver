@@ -7,6 +7,10 @@ volatile extern unsigned char id_tab[4][3];
 volatile extern unsigned char color[4];
 volatile unsigned extern char device;
 volatile unsigned extern char id_temp[3];
+volatile unsigned extern int bite[4];
+volatile unsigned extern char bite_type[4];
+volatile unsigned extern char contact[4];
+volatile unsigned extern int led_counter;
 
 //led drivers
 #define SDI_PORT PORTC	

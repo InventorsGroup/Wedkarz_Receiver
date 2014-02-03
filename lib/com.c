@@ -13,9 +13,7 @@ void parse(uint8_t *data)
 	{
 		if (data[4] < 0x05) //only data from syg to central unit
 		{	
-			z*=-1;
-			led_set(11,z);
-			if(data[4] == 0x04) //answer for paring
+			if((data[4] == 0x04) && (wait_for_pair == 1)) //answer for paring
 			{
 				wait_for_pair = 0;
 				
@@ -48,8 +46,15 @@ void parse(uint8_t *data)
 				{
 					case 0x03: 
 						color[k] = data[5];
+						contact[k] = 1;
+					break;
+					
+					case 0x01:
+						bite[k] = 1;
+						bite_type[k] = data[5];
 					break;
 				}
+				
 			}
 			known_id = 0;
 		}
@@ -69,7 +74,15 @@ void send(uint8_t c)
 			command[5] = 0x01;
 
 			rfm12_tx(6, 0, command);
+		case 2:
+			command[0] = 0xFF;
+			command[1] = id_tab[device][0];
+			command[2] = id_tab[device][1];
+			command[3] = id_tab[device][2];
+			command[4] = 0x0D;
+			command[5] = 0x01;
 			
+			rfm12_tx(6, 0, command);
 		break;
 	}
 } 

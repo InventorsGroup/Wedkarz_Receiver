@@ -45,7 +45,10 @@ ISR(INT1_vect) //TOP (Power Button) INT
 	power_up();
 	//led_enable(0);
 	_delay_ms(100);
-	if (((B1_PIN & (1 << B1)) ) !=0 ) power_flag = 0;
+	if (((B1_PIN & (1 << B1)) ) !=0 ) 
+	{
+		power_flag = 0;
+	}
 	else 
 	{
 		led_enable(1);
