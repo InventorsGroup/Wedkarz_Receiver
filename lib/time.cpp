@@ -1,7 +1,7 @@
 #include "time.h"
 
 #define T1S 30
-#define T2S 35
+#define T2S 80
 #define T10S 500
 #define T20S 50
 #define T250MS 7
@@ -9,6 +9,7 @@
 #define T35MS 1
 
 volatile unsigned int contact_counter = 0;
+volatile unsigned char contact_counter2 = 0;
 volatile unsigned int t10s = 0;
 volatile unsigned int t500ms = 0;
 volatile int fb_led = -1;
@@ -63,6 +64,7 @@ ISR(TIMER0_COMPA_vect)
 		else
 		{
 			func_btn = 0;
+			led_clear();
 			if (func_mode == 1)
 			{
 				device++;
@@ -103,6 +105,7 @@ ISR(TIMER0_COMPA_vect)
 		else 
 		{
 			//tu wjebać zapis do epromu id_tab
+			led_clear();
 			func_mode = 0;
 			wait_for_pair = 0;
 			
@@ -115,7 +118,7 @@ ISR(TIMER0_COMPA_vect)
 		if (func_mode == 1)
 		{
 			fb_led *= -1;
-			send(1);
+			send(1, 0);
 		}
 		
 		t500ms = 0;
@@ -159,26 +162,22 @@ ISR(TIMER0_COMPA_vect)
 					}
 					bite[i]++;
 				}
-
 			}
 		}
-		
-		
 		bite_blink = 0;
 	}
 	
 	if (contact_counter == T500MS)
 	{
-		if ((main_mode == 1) && (func_mode ==0))
+		if ((main_mode == 1) && (func_mode == 0))
 		{
 			if (d > 3) d = 0;
-			if (contact[d] > 0) led_set(d, state*color[d]);
-			else led_set(d, 0);
-			send(2);
+			send(2, d);
 			d++;
 		}
 		contact_counter = 0;
 	}
+	
 	
 	for (int i = 0; i < 4; i++)
 	{
@@ -202,73 +201,7 @@ ISR(TIMER0_COMPA_vect)
 	blinker++;
 	func_timer++;
 	
-	if (main_mode == 1)
-	{
-		
-		led_set(9,1);
-	}
-	else led_set (9,0); 
 	
-	if (main_mode == 2) led_set(7,1);
-	else led_set (7,0); 
-	
-	if (func_mode == 1)
-	{
-		switch (function)
-		{
-			case 0: 
-				led_set(4, 1);
-				led_set(5, 0);
-				led_set(6, 0);
-				break;
-			case 1:
-				led_set(4, 0);
-				led_set(5, 1);
-				led_set(6, 0);
-				break;
-			case 2:
-				led_set(4, 0);
-				led_set(5, 0);
-				led_set(6, 1);
-				break;
-		}
-
-		switch (device)
-		{
-			case 0:
-				
-				led_set(0,color[device]);
-				led_set(1,0);
-				led_set(2,0);
-				led_set(3,0);
-				break;
-			case 1:
-				led_set(0,0);
-				led_set(1,color[device]);
-				led_set(2,0);
-				led_set(3,0);
-				break;
-			case 2:
-				led_set(0,0);
-				led_set(1,0);
-				led_set(2,color[device]);
-				led_set(3,0);
-				break;
-			case 3:
-				led_set(0,0);
-				led_set(1,0);
-				led_set(2,0);
-				led_set(3,color[device]);
-				break;
-		}
-		
-	}
-	else
-	{
-		led_set(4, 0);
-		led_set(5, 0);
-		led_set(6, 0);
-	}
 	
 }
 

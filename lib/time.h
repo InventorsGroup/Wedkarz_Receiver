@@ -12,6 +12,7 @@ uint8_t losuj();
 
 extern volatile unsigned int t1s;
 extern volatile unsigned int t10s;
+extern volatile unsigned char state;
 
 extern volatile int a;
 extern volatile int b;

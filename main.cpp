@@ -36,18 +36,91 @@ int main(void)
 			if (rfm12_rx_status() == STATUS_COMPLETE)
 			{
 				bufcontents = rfm12_rx_buffer();
-
-				// dump buffer contents to uart			
+		
 				if (rfm12_rx_len() > 0)
 				{
 					parse(bufcontents);
 				}
-				// tell the implementation that the buffer
-				// can be reused for the next data.
 				rfm12_rx_clear();
 			}
 			
-		}		
+		}
+
+		
+		if (func_mode == 1)
+		{
+			switch (function)
+			{
+				case 0: 
+					led_set(4, 1);
+					led_set(5, 0);
+					led_set(6, 0);
+					break;
+				case 1:
+					led_set(4, 0);
+					led_set(5, 1);
+					led_set(6, 0);
+					break;
+				case 2:
+					led_set(4, 0);
+					led_set(5, 0);
+					led_set(6, 1);
+					break;
+			}
+
+			switch (device)
+			{
+				case 0:
+					
+					led_set(0,color[device]);
+					led_set(1,0);
+					led_set(2,0);
+					led_set(3,0);
+					break;
+				case 1:
+					led_set(0,0);
+					led_set(1,color[device]);
+					led_set(2,0);
+					led_set(3,0);
+					break;
+				case 2:
+					led_set(0,0);
+					led_set(1,0);
+					led_set(2,color[device]);
+					led_set(3,0);
+					break;
+				case 3:
+					led_set(0,0);
+					led_set(1,0);
+					led_set(2,0);
+					led_set(3,color[device]);
+					break;
+			}
+			
+		}
+		else
+		{
+			led_set(4, 0);
+			led_set(5, 0);
+			led_set(6, 0);
+			
+			if (main_mode == 1)
+			{
+				led_set(11,0);
+				led_set(12,0);
+				led_set(9,1);
+				for (int i = 0; i < 4; i++)
+				{
+					if (contact[i] > 0) led_set(i, state*color[i]);
+					else led_set(i, 0);
+				}
+			}
+			else led_set (9,0); 
+			
+			if (main_mode == 2) led_set(7,1);
+			else led_set (7,0); 
+		}
+		
 		rfm12_poll();
 		rfm12_tick();	
 	}
