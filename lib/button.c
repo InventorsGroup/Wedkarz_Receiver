@@ -4,9 +4,9 @@ volatile unsigned char power_btn = 0;
 volatile char func_btn = 0;
 volatile int power_flag;
 volatile char main_mode;
-
+volatile char func_mode = 0;
 volatile char function = 2;
-
+volatile unsigned int func_timer;
 volatile unsigned char pwr;
 
 void button_init()
@@ -43,13 +43,19 @@ void button_init()
 ISR(INT1_vect) //TOP (Power Button) INT
 {
 	power_up();
-	led_enable(1);
-	_delay_ms(500);
+	//led_enable(0);
+	_delay_ms(100);
 	if (((B1_PIN & (1 << B1)) ) !=0 ) 
 	{
 		power_flag = 0;
 	}
-	PCICR |= (1 << PCIE2) | (1 << PCIE0); // enable PCINT
+	else 
+	{
+		led_enable(1);
+		_delay_ms(5);
+		power_flag = 1;	
+	}
+
 }
 
 ISR(PCINT0_vect)
@@ -66,7 +72,7 @@ ISR(PCINT0_vect)
 ISR(PCINT2_vect)
 {
 	char mask = 0;
-	_delay_ms(10);
+	
 	mask |= (1 << B1) | (1 << B2) | (1 << B4) | (1 << B5) | (1 << B6) | (1 << B7);
 	_delay_ms(2);
 	if ((PIND & mask) != mask)
@@ -78,45 +84,13 @@ ISR(PCINT2_vect)
 				power_btn = 1;
 			}
 		}
-		
 		if ((B4_PIN & (1 << B4)) == 0)
 		{	
-			func_timer = 0;
-			if (func_mode == 1)
-			{
-				switch (function)
-				{
-					case 0: 
-						send(3, device, 0x31);
-						break;
-					case 1:
-						send(3, device, 0x21);
-						break;
-					case 2:
-						send(3, device, 0x11);
-						break;
-				}
-			}
+
 		}
-		
 		else if ((B5_PIN & (1 << B5)) == 0)
 		{
-			func_timer = 0;
-			if (func_mode == 1)
-			{
-				switch (function)
-				{
-					case 0: 
-						send(3, device, 0x32);
-						break;
-					case 1:
-						send(3, device, 0x22);
-						break;
-					case 2:
-						send(3, device, 0x12);
-						break;
-				}
-			}
+
 		}
 		
 		else if ((B6_PIN & (1 << B6)) == 0)
@@ -147,27 +121,22 @@ ISR(PCINT2_vect)
 
 void power_down()
 {
-	led_set(11,1);
-				_delay_ms(100);
-				led_set(11,0);
-				_delay_ms(100);
-	_delay_ms(100);
 	PCICR &= ~(1 << PCIE2) & ~(1 << PCIE0); // disable PCINT
 	EIMSK |= (1 << INT1); // Enebale INT1 external interrupt on low state
-	EICRA &= ~(1 << ISC10) & ~(1 << ISC11);
-	led_clear();
+	power_flag = 0;
 	led_enable(0);
-	_delay_ms(500);
 	SMCR |= (1 << SM1) |(1 << SE);
 	sleep_cpu();
 }
 
 void power_up()
 {
-		SMCR &= ~(1 << SE);
 		power_flag = 1;
+		SMCR = 0;
 		EIMSK &= ~(1 << INT1); //disable INT1
+		PCICR |= (1 << PCIE2) | (1 << PCIE0); // enable PCINT
+		sei();
 		main_mode = 0;
 		func_mode = 0;
-		function = 2;	
+		function = 2;
 }

@@ -61,11 +61,7 @@ void parse(uint8_t *data)
 	}
 }
 
-<<<<<<< HEAD
-void send(uint8_t c, uint8_t dev, uint8_t param)
-=======
-void send(uint8_t c)
->>>>>>> parent of acd8d37... Fixes
+void send(uint8_t c, uint8_t dev)
 {
 	switch(c)
 	{
@@ -76,26 +72,16 @@ void send(uint8_t c)
 			command[3] = id_temp[2];
 			command[4] = 0x0C;
 			command[5] = 0x01;
+
 			rfm12_tx(6, 0, command);
-		break;
-		
 		case 2:
-			command[0] = 0xFF;
-			command[1] = id_tab[device][0];
-			command[2] = id_tab[device][1];
-			command[3] = id_tab[device][2];
-			command[4] = 0x0D;
-			command[5] = 0x01;	
-			rfm12_tx(6, 0, command);
-		break;
-		
-		case 3:
 			command[0] = 0xFF;
 			command[1] = id_tab[dev][0];
 			command[2] = id_tab[dev][1];
 			command[3] = id_tab[dev][2];
-			command[4] = 0x0A;
-			command[5] = param;
+			command[4] = 0x0D;
+			command[5] = 0x01;
+			
 			rfm12_tx(6, 0, command);
 		break;
 	}

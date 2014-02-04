@@ -53,5 +53,3 @@ void led_push();
 Clears LEDs 0-7
 */
 void led_clear();
-
-void led_clear_no_push();

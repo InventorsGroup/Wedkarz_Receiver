@@ -120,7 +120,7 @@ This is a bitmask that defines how "rude" this library behaves
 /* control rate, frequency, etc during runtime
  * this setting will certainly add a bit code
  **/
-#define RFM12_LIVECTRL 0
+#define RFM12_LIVECTRL 1
 #define RFM12_NORETURNS 0
 #define RFM12_USE_WAKEUP_TIMER 0
 #define RFM12_TRANSMIT_ONLY 0
