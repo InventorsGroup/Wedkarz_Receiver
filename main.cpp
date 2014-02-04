@@ -9,17 +9,30 @@
 #include "lib/time.h"
 #include "lib/rfm12.h"
 #include "lib/com.h"
+#include "lib/speaker.h"
 
 
 uint8_t *bufcontents;
 
+volatile unsigned char f=-1;
+
+void adc_init(void)
+{
+	ADCSRA  |=  (1<<ADPS1)|(1<<ADPS2);
+	ADCSRA  |=  (1<<ADEN); 
+	ADCSRA  |=  (1<<ADATE); 
+	ADCSRA  |=  (1<<ADIE); 
+	ADCSRA  |= (1<<ADSC);
+}
 
 int main(void) 
  {  
+	adc_init();
 	led_init();
 	button_init();
 	time_init();
 	rfm12_init();
+	
 	sei();
 	power_up();
 	power_down();
@@ -27,8 +40,11 @@ int main(void)
 	
 	while(1)
 	{	
+		led_enable(1);
+		
 		if (power_flag == 0)
 		{		
+
 			power_down();
 		}
 		else
@@ -120,9 +136,17 @@ int main(void)
 			if (main_mode == 2) led_set(7,1);
 			else led_set (7,0); 
 		}
-		
+		cli();
 		rfm12_poll();
 		rfm12_tick();	
+		sei();
 	}
  }
-
+ 
+ 
+ISR(ADC_vect)      
+{
+	rnd =  (rnd<<1); 
+	
+	rnd |= ADC & 0x01;   
+}

@@ -53,7 +53,9 @@ ISR(INT1_vect) //TOP (Power Button) INT
 		_delay_ms(5);
 		power_flag = 1;	
 	}
-
+	ADCSRA |= (1 << ADIE);
+	ADCSRA |= (1 << ADEN);
+	ADCSRA |= (1 << ADSC);
 }
 
 ISR(PCINT0_vect)
@@ -149,6 +151,8 @@ ISR(PCINT2_vect)
 
 void power_down()
 {
+	ADCSRA &= ~(1 << ADIE);
+	ADCSRA &= ~(1 << ADEN);
 	PCICR &= ~(1 << PCIE2) & ~(1 << PCIE0); // disable PCINT
 	EIMSK |= (1 << INT1); // Enebale INT1 external interrupt on low state
 	power_flag = 0;

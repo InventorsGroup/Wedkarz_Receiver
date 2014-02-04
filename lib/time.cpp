@@ -54,6 +54,10 @@ ISR(TIMER0_COMPA_vect)
 			{
 				main_mode++;
 				if (main_mode > 3 )  main_mode = 1;
+				led_set(0,0);
+				led_set(1,0);
+				led_set(2,0);
+				led_set(3,0);
 			}
 		}
 	}
@@ -64,15 +68,17 @@ ISR(TIMER0_COMPA_vect)
 		else
 		{
 			func_btn = 0;
-			led_clear();
 			if (func_mode == 1)
 			{
 				device++;
 				func_timer = 0;
 				if (device > 3 ) device = 0;
-				id_temp[0] = losuj();
-				id_temp[1] = losuj();
-				id_temp[2] = losuj();
+				id_temp[0] = rnd;
+				_delay_ms(10);
+				id_temp[1] = rnd;
+				_delay_ms(10);
+				id_temp[2] = rnd;
+				_delay_ms(10);
 				wait_for_pair = 1;
 			}
 		}
@@ -105,10 +111,12 @@ ISR(TIMER0_COMPA_vect)
 		else 
 		{
 			//tu wjebać zapis do epromu id_tab
-			led_clear();
 			func_mode = 0;
 			wait_for_pair = 0;
-			
+			led_set(0,0);
+			led_set(1,0);
+			led_set(2,0);
+			led_set(3,0);
 		}
 	}
 	
@@ -130,6 +138,10 @@ ISR(TIMER0_COMPA_vect)
 		{
 			func_mode =0;
 			wait_for_pair = 0;
+			led_set(0,0);
+			led_set(1,0);
+			led_set(2,0);
+			led_set(3,0);
 			//tu też wpierdolić zapis do eepromu
 		}
 	}

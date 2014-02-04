@@ -14,6 +14,7 @@ volatile unsigned extern int led_counter;
 extern volatile char main_mode;
 extern volatile char func_mode;
 extern volatile unsigned int func_timer;
+volatile extern unsigned char rnd;
 
 //led drivers
 #define SDI_PORT PORTC	

@@ -8,3 +8,4 @@ volatile unsigned char contact[4] = {0, 0, 0, 0};
 volatile unsigned int led_counter = 0;
 volatile unsigned int func_timer;
 volatile char func_mode = 0;
+volatile unsigned char rnd;
