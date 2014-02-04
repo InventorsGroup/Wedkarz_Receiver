@@ -6,12 +6,11 @@
 
 #include "rfm12.h"
 #include "led.h"
-#include "button.h"
 
 volatile unsigned extern char wait_for_pair;
 
 
 void parse(uint8_t *data);
 
-void send(uint8_t c, uint8_t dev);
+void send(uint8_t c, uint8_t dev, uint8_t param);
 

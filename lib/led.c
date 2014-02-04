@@ -53,7 +53,7 @@ void led_enable(unsigned char s)
 	if (s > 0)
 	{
 		LED_ON_PORT |= (1 << LED_ON);
-		_delay_ms(5);
+		_delay_ms(50);
 		led_power(led_pwr);
 	}
 	else
@@ -201,4 +201,9 @@ void led_clear()
 {
 	for (int i=0; i<36; i++) leds[i] = 0;
 	led_push();
+}
+
+void led_clear_no_push()
+{
+	for (int i=0; i<36; i++) leds[i] = 0;
 }

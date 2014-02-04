@@ -15,18 +15,12 @@ volatile unsigned int t500ms = 0;
 volatile int fb_led = -1;
 volatile unsigned char bite_blink = 0;
 
-unsigned int stan_poprzedni=1; //Przy inicjalizacji bedzie to 'seed'
-const unsigned int x=22695477, c=1;
 volatile unsigned char state = -1;
 volatile unsigned char d = 0;
 volatile unsigned char blinker = 0;
 
 
-uint8_t losuj()
-{
-	stan_poprzedni=(x*stan_poprzedni+c);
-	return stan_poprzedni%257;
-}
+
 
 void time_init()
 {
@@ -53,6 +47,10 @@ ISR(TIMER0_COMPA_vect)
 			if (func_mode == 0)
 			{
 				main_mode++;
+				led_set(0,0);
+				led_set(1,0);
+				led_set(2,0);
+				led_set(3,0);
 				if (main_mode > 3 )  main_mode = 1;
 			}
 		}
@@ -64,21 +62,20 @@ ISR(TIMER0_COMPA_vect)
 		else
 		{
 			func_btn = 0;
-			led_clear();
 			if (func_mode == 1)
 			{
 				device++;
 				func_timer = 0;
 				if (device > 3 ) device = 0;
-				id_temp[0] = losuj();
-				id_temp[1] = losuj();
-				id_temp[2] = losuj();
+				id_temp[0] = rnd[0];
+				id_temp[1] = rnd[1];
+				id_temp[2] = rnd[2];
 				wait_for_pair = 1;
 			}
 		}
 	}
 	
-	if (power_btn == T1S)
+	if (power_btn >= T1S)
 	{
 		power_btn = 0;
 		power_flag = 0;
@@ -97,16 +94,15 @@ ISR(TIMER0_COMPA_vect)
 			for (int i = 0; i < 4; i++)
 			{
 				bite[i] = 0;
-				led_set(11,0);
-				led_set(12,0);
-				led_set (i,0);
+			
 			}	
 		}
 		else 
 		{
 			//tu wjebać zapis do epromu id_tab
-			led_clear();
+			
 			func_mode = 0;
+			main_mode = 1;
 			wait_for_pair = 0;
 			
 		}
@@ -118,7 +114,7 @@ ISR(TIMER0_COMPA_vect)
 		if (func_mode == 1)
 		{
 			fb_led *= -1;
-			send(1, 0);
+			send(1, 0, 0);
 		}
 		
 		t500ms = 0;
@@ -130,6 +126,7 @@ ISR(TIMER0_COMPA_vect)
 		{
 			func_mode =0;
 			wait_for_pair = 0;
+			main_mode = 1;
 			//tu też wpierdolić zapis do eepromu
 		}
 	}
@@ -145,21 +142,13 @@ ISR(TIMER0_COMPA_vect)
 					bite[i] = 0;
 					led_set(11,0);
 					led_set(12,0);
-					led_set (i,0);
+					led_set(0,0);
+					led_set(1,0);
+					led_set(2,0);
+					led_set(3,0);
 				}
 				if (bite[i] > 0)
 				{
-					led_set(i, state*color[i]);
-					if (bite_type[i] == 1)
-					{
-						led_set(11,1);
-						led_set(12,0);
-					}
-					else
-					{
-						led_set(11,0);
-						led_set(12,1);
-					}
 					bite[i]++;
 				}
 			}
@@ -172,7 +161,7 @@ ISR(TIMER0_COMPA_vect)
 		if ((main_mode == 1) && (func_mode == 0))
 		{
 			if (d > 3) d = 0;
-			send(2, d);
+			send(2, d, 0);
 			d++;
 		}
 		contact_counter = 0;
@@ -193,7 +182,6 @@ ISR(TIMER0_COMPA_vect)
 
 	led_counter++;
 	bite_blink++;
-	led_set(10, func_mode*fb_led);
 	led_push();
 	contact_counter++;
 	t10s++;

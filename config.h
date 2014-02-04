@@ -11,6 +11,10 @@ volatile unsigned extern int bite[4];
 volatile unsigned extern char bite_type[4];
 volatile unsigned extern char contact[4];
 volatile unsigned extern int led_counter;
+volatile unsigned extern int func_timer;
+volatile extern char func_mode;
+volatile extern char rnd[3];
+volatile extern char rnd_i;
 
 //led drivers
 #define SDI_PORT PORTC	

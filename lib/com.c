@@ -61,7 +61,7 @@ void parse(uint8_t *data)
 	}
 }
 
-void send(uint8_t c, uint8_t dev)
+void send(uint8_t c, uint8_t dev, uint8_t param)
 {
 	switch(c)
 	{
@@ -72,16 +72,26 @@ void send(uint8_t c, uint8_t dev)
 			command[3] = id_temp[2];
 			command[4] = 0x0C;
 			command[5] = 0x01;
-
 			rfm12_tx(6, 0, command);
+		break;
+		
 		case 2:
 			command[0] = 0xFF;
 			command[1] = id_tab[dev][0];
 			command[2] = id_tab[dev][1];
 			command[3] = id_tab[dev][2];
 			command[4] = 0x0D;
-			command[5] = 0x01;
-			
+			command[5] = 0x01;	
+			rfm12_tx(6, 0, command);
+		break;
+		
+		case 3:
+			command[0] = 0xFF;
+			command[1] = id_tab[dev][0];
+			command[2] = id_tab[dev][1];
+			command[3] = id_tab[dev][2];
+			command[4] = 0x0A;
+			command[5] = param;
 			rfm12_tx(6, 0, command);
 		break;
 	}
