@@ -15,18 +15,11 @@ volatile unsigned int t500ms = 0;
 volatile int fb_led = -1;
 volatile unsigned char bite_blink = 0;
 
-unsigned int stan_poprzedni=1; //Przy inicjalizacji bedzie to 'seed'
-const unsigned int x=22695477, c=1;
 volatile unsigned char state = -1;
 volatile unsigned char d = 0;
 volatile unsigned char blinker = 0;
 
 
-uint8_t losuj()
-{
-	stan_poprzedni=(x*stan_poprzedni+c);
-	return stan_poprzedni%257;
-}
 
 void time_init()
 {
@@ -96,8 +89,16 @@ ISR(TIMER0_COMPA_vect)
 		func_btn = 0;
 		if (func_mode == 0)
 		{	
+			
 			func_timer = 0;
 			device = 0;
+			id_temp[0] = rnd;
+			_delay_ms(10);
+			id_temp[1] = rnd;
+			_delay_ms(10);
+			id_temp[2] = rnd;
+			_delay_ms(10);
+			wait_for_pair = 1;
 			func_mode = 1;
 			function = 2;
 			for (int i = 0; i < 4; i++)
@@ -117,6 +118,7 @@ ISR(TIMER0_COMPA_vect)
 			led_set(1,0);
 			led_set(2,0);
 			led_set(3,0);
+			led_set(10, 0);
 		}
 	}
 	
@@ -142,6 +144,7 @@ ISR(TIMER0_COMPA_vect)
 			led_set(1,0);
 			led_set(2,0);
 			led_set(3,0);
+			led_set(10, 0);
 			//tu też wpierdolić zapis do eepromu
 		}
 	}
@@ -205,7 +208,7 @@ ISR(TIMER0_COMPA_vect)
 
 	led_counter++;
 	bite_blink++;
-	led_set(10, func_mode*fb_led);
+	
 	led_push();
 	contact_counter++;
 	t10s++;

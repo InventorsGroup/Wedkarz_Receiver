@@ -15,6 +15,7 @@
 uint8_t *bufcontents;
 
 volatile unsigned char f=-1;
+volatile unsigned int value;
 
 void adc_init(void)
 {
@@ -32,10 +33,25 @@ int main(void)
 	button_init();
 	time_init();
 	rfm12_init();
+	speaker_init();
 	
 	sei();
+	
+	// for (int i = 0; i < 4; i++)
+	// {
+		// id_temp[0] = rnd;
+		// _delay_ms(10);
+		// id_temp[1] = rnd;
+		// _delay_ms(10);
+		// id_temp[2] = rnd;
+		// _delay_ms(10);
+	
+	// }
+
 	power_up();
 	power_down();
+	
+	
 	
 	
 	while(1)
@@ -88,31 +104,31 @@ int main(void)
 			{
 				case 0:
 					
-					led_set(0,color[device]);
+					led_set(0,fb_led*color[device]);
 					led_set(1,0);
 					led_set(2,0);
 					led_set(3,0);
 					break;
 				case 1:
 					led_set(0,0);
-					led_set(1,color[device]);
+					led_set(1,fb_led*color[device]);
 					led_set(2,0);
 					led_set(3,0);
 					break;
 				case 2:
 					led_set(0,0);
 					led_set(1,0);
-					led_set(2,color[device]);
+					led_set(2,fb_led*color[device]);
 					led_set(3,0);
 					break;
 				case 3:
 					led_set(0,0);
 					led_set(1,0);
 					led_set(2,0);
-					led_set(3,color[device]);
+					led_set(3,fb_led*color[device]);
 					break;
 			}
-			
+			led_set(10, fb_led);
 		}
 		else
 		{
@@ -146,7 +162,10 @@ int main(void)
  
 ISR(ADC_vect)      
 {
-	rnd =  (rnd<<1); 
-	
-	rnd |= ADC & 0x01;   
+	value = (ADCL | (ADCH << 8));
+
+	rnd = (rnd<<1); 
+	value &= 0x01;
+	rnd |= value;
+	if (rnd == 0) rnd = 1;
 }

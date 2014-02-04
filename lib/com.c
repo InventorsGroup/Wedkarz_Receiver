@@ -21,9 +21,8 @@ void parse(uint8_t *data)
 				
 				if ((data[1] == id_temp[0]) && (data[2] == id_temp[1]) &&(data[3] == id_temp[2]))
 				{
-					led_set(12,1);
-					_delay_ms(500);
-					led_set(12,0);
+					led_set(12,z);
+					z*=-1;
 					color[device] = data[5];
 					id_tab[device][0] = id_temp[0];
 					id_tab[device][1] = id_temp[1];

@@ -16,6 +16,7 @@ extern volatile unsigned char state;
 
 extern volatile int a;
 extern volatile int b;
+extern volatile int fb_led;
 
 void time_init();
 
