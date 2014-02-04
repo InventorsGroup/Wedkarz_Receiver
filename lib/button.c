@@ -4,9 +4,7 @@ volatile unsigned char power_btn = 0;
 volatile char func_btn = 0;
 volatile int power_flag;
 volatile char main_mode;
-volatile char func_mode = 0;
 volatile char function = 2;
-volatile unsigned int func_timer;
 volatile unsigned char pwr;
 
 void button_init()
@@ -86,11 +84,41 @@ ISR(PCINT2_vect)
 		}
 		if ((B4_PIN & (1 << B4)) == 0)
 		{	
-
+			func_timer = 0;
+ 			if (func_mode == 1)
+ 			{
+ 				switch (function)
+ 				{
+ 					case 0: 
+ 						send(3, device, 0x31);
+ 						break;
+ 					case 1:
+ 						send(3, device, 0x21);
+ 						break;
+ 					case 2:
+ 						send(3, device, 0x11);
+ 						break;
+ 				}
+ 			}
 		}
 		else if ((B5_PIN & (1 << B5)) == 0)
 		{
-
+			func_timer = 0;
+ 			if (func_mode == 1)
+ 			{
+ 				switch (function)
+ 				{
+ 					case 0: 
+ 						send(3, device, 0x32);
+ 						break;
+ 					case 1:
+ 						send(3, device, 0x22);
+ 						break;
+ 					case 2:
+ 						send(3, device, 0x12);
+ 						break;
+ 				}
+ 			}
 		}
 		
 		else if ((B6_PIN & (1 << B6)) == 0)

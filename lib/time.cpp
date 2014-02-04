@@ -118,7 +118,7 @@ ISR(TIMER0_COMPA_vect)
 		if (func_mode == 1)
 		{
 			fb_led *= -1;
-			send(1, 0);
+			send(1, 0, 0);
 		}
 		
 		t500ms = 0;
@@ -172,7 +172,7 @@ ISR(TIMER0_COMPA_vect)
 		if ((main_mode == 1) && (func_mode == 0))
 		{
 			if (d > 3) d = 0;
-			send(2, d);
+			send(2, d, 0);
 			d++;
 		}
 		contact_counter = 0;

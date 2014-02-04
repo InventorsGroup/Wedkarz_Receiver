@@ -5,12 +5,12 @@
 
 #include "../config.h"
 #include "led.h"
+#include "com.h"
 
 volatile extern unsigned char power_btn;
 volatile extern char func_btn;
 extern volatile int power_flag;
-extern volatile char main_mode;
-volatile extern char func_mode;
+
 volatile extern char function;
 volatile unsigned extern int func_timer;
 
