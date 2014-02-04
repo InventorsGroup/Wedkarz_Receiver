@@ -12,8 +12,11 @@ uint8_t losuj();
 
 extern volatile unsigned int t1s;
 extern volatile unsigned int t10s;
+<<<<<<< HEAD
 extern volatile unsigned char state;
 extern volatile int fb_led;
+=======
+>>>>>>> parent of acd8d37... Fixes
 
 extern volatile int a;
 extern volatile int b;

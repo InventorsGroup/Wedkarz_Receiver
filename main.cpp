@@ -52,14 +52,18 @@ int main(void)
 				led_set(11,f);
 				f*=-1;
 				bufcontents = rfm12_rx_buffer();
-		
+
+				// dump buffer contents to uart			
 				if (rfm12_rx_len() > 0)
 				{
 					parse(bufcontents);
 				}
+				// tell the implementation that the buffer
+				// can be reused for the next data.
 				rfm12_rx_clear();
 			}
 			
+<<<<<<< HEAD
 		}
 
 		
@@ -161,6 +165,9 @@ int main(void)
 		
 		led_set(10, func_mode*fb_led);
 		
+=======
+		}		
+>>>>>>> parent of acd8d37... Fixes
 		rfm12_poll();
 		rfm12_tick();	
 	}
