@@ -16,15 +16,30 @@ uint8_t *bufcontents;
 
 volatile unsigned char f=-1;
 volatile unsigned int value;
+volatile unsigned char i =0;
+volatile unsigned int temp;
 
 void adc_init(void)
 {
-	ADCSRA  |=  (1<<ADPS1)|(1<<ADPS2);
-	ADCSRA  |=  (1<<ADEN); 
+	ADCSRA  |=  (1<<ADPS2)|(1<<ADPS1);
 	ADCSRA  |=  (1<<ADATE); 
-	ADCSRA  |=  (1<<ADIE); 
-	ADCSRA  |= (1<<ADSC);
 }
+
+void uart_init(uint16_t ubrr)
+{
+	// Ustawienie prędkości transmisji
+	UBRR0H = (uint8_t)(ubrr >> 8);
+	UBRR0L = (uint8_t)ubrr;
+ 
+	// Włączenie nadajnika i odbiornika
+	UCSR0B = (1 << RXEN0) | (1 << TXEN0);
+ 
+	// Ustawienie formatu ramki:
+	// 8 bitów danych, 1 bit stopu, brak parzystości
+	UCSR0C = (1 << UCSZ00) | (1 << UCSZ01);
+}
+
+
 
 int main(void) 
  {  
@@ -34,25 +49,12 @@ int main(void)
 	time_init();
 	rfm12_init();
 	speaker_init();
-	
+	uart_init(26);
+
 	sei();
-	
-	// for (int i = 0; i < 4; i++)
-	// {
-		// id_temp[0] = rnd;
-		// _delay_ms(10);
-		// id_temp[1] = rnd;
-		// _delay_ms(10);
-		// id_temp[2] = rnd;
-		// _delay_ms(10);
-	
-	// }
 
 	power_up();
 	power_down();
-	
-	
-	
 	
 	while(1)
 	{	
@@ -162,10 +164,16 @@ int main(void)
  
 ISR(ADC_vect)      
 {
+	int x = i/8;
 	value = (ADCL | (ADCH << 8));
-
-	rnd = (rnd<<1); 
 	value &= 0x01;
-	rnd |= value;
-	if (rnd == 0) rnd = 1;
+	temp = (temp << 1);
+	temp |= (value);
+	
+	if (((i % 8) == 7) && (temp != 0))
+	{	
+		rnd[x] = temp;
+	}
+	i++;
+	if (i > 23) i = 0;
 }

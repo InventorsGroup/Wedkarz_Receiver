@@ -18,8 +18,16 @@ volatile unsigned char bite_blink = 0;
 volatile unsigned char state = -1;
 volatile unsigned char d = 0;
 volatile unsigned char blinker = 0;
+unsigned volatile int sender = 0; //USART
 
-
+void uart_putc(uint8_t data)
+{
+	// Oczekiwanie na zakończenie nadawania
+	while (!(UCSR0A & (1 << UDRE0)));
+ 
+	// Wysłanie danych
+	UDR0 = data;
+}
 
 void time_init()
 {
@@ -36,6 +44,14 @@ ISR(TIMER0_COMPA_vect)
 		state*=-1;
 		blinker = 0;
 	}
+	
+	// if (sender == 20)
+	// {
+		// sender = 0;
+		// uart_putc(rnd[0]);
+		// uart_putc(rnd[1]);
+		// uart_putc(rnd[2]);
+	// }
 	
 	if (power_btn > 0)
 	{
@@ -57,6 +73,9 @@ ISR(TIMER0_COMPA_vect)
 
 	if (func_btn > 0)
 	{
+		ADCSRA |= (1 << ADIE);
+		ADCSRA |= (1 << ADEN);
+		ADCSRA |= (1 << ADSC);
 		if (!(B3_PIN & (1 << B3))) func_btn++;	
 		else
 		{
@@ -66,13 +85,18 @@ ISR(TIMER0_COMPA_vect)
 				device++;
 				func_timer = 0;
 				if (device > 3 ) device = 0;
-				id_temp[0] = rnd;
-				_delay_ms(10);
-				id_temp[1] = rnd;
-				_delay_ms(10);
-				id_temp[2] = rnd;
-				_delay_ms(10);
+				id_temp[0] = rnd[0];
+				id_temp[1] = rnd[1];
+				id_temp[2] = rnd[2];
+				uart_putc(rnd[0]);
+				uart_putc(rnd[1]);
+				uart_putc(rnd[2]);
 				wait_for_pair = 1;
+			}
+			else
+			{
+				ADCSRA &= ~(1 << ADIE);
+				ADCSRA &= ~(1 << ADEN);
 			}
 		}
 	}
@@ -89,18 +113,18 @@ ISR(TIMER0_COMPA_vect)
 		func_btn = 0;
 		if (func_mode == 0)
 		{	
-			
 			func_timer = 0;
 			device = 0;
-			id_temp[0] = rnd;
-			_delay_ms(10);
-			id_temp[1] = rnd;
-			_delay_ms(10);
-			id_temp[2] = rnd;
-			_delay_ms(10);
+			id_temp[0] = rnd[0];
+			id_temp[1] = rnd[1];
+			id_temp[2] = rnd[2];
+			uart_putc(rnd[0]);
+			uart_putc(rnd[1]);
+			uart_putc(rnd[2]);
 			wait_for_pair = 1;
 			func_mode = 1;
 			function = 2;
+			
 			for (int i = 0; i < 4; i++)
 			{
 				bite[i] = 0;
@@ -119,6 +143,8 @@ ISR(TIMER0_COMPA_vect)
 			led_set(2,0);
 			led_set(3,0);
 			led_set(10, 0);
+			ADCSRA &= ~(1 << ADIE);
+			ADCSRA &= ~(1 << ADEN);
 		}
 	}
 	
@@ -145,6 +171,9 @@ ISR(TIMER0_COMPA_vect)
 			led_set(2,0);
 			led_set(3,0);
 			led_set(10, 0);
+			
+			ADCSRA &= ~(1 << ADIE);
+			ADCSRA &= ~(1 << ADEN);
 			//tu też wpierdolić zapis do eepromu
 		}
 	}
@@ -216,7 +245,7 @@ ISR(TIMER0_COMPA_vect)
 	blinker++;
 	func_timer++;
 	
-	
+	sender++; //USART
 	
 }
 

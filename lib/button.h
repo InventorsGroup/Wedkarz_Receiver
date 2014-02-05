@@ -24,3 +24,5 @@ ISR(PCINT2_vect);
 
 void power_down();
 void power_up();
+void uart_putc(uint8_t data);
+void uart_putc(uint8_t data);

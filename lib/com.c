@@ -7,6 +7,8 @@ volatile char z = -1;
 
 volatile unsigned char wait_for_pair = 0;
 
+
+
 void parse(uint8_t *data)
 {
 	if (data[0] == 0xFF)
@@ -65,6 +67,7 @@ void send(uint8_t c, uint8_t dev, uint8_t param)
 	switch(c)
 	{
 		case 1: //parowanie z przypisaniem ID
+			
 			command[0] = 0xFF;
 			command[1] = id_temp[0];
 			command[2] = id_temp[1];

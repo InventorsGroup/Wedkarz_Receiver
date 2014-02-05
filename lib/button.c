@@ -18,11 +18,13 @@ void button_init()
 	B3_DDR &= ~(1 << B3);
 	B3_PORT |= (1 << B3);
 	
-	B4_DDR &= ~(1 << B4);
-	B4_PORT |= (1 << B4);
+	// B4_DDR &= ~(1 << B4);
+	// B4_PORT |= (1 << B4);
+	DDRD |= (1 << PD1); // UART
 	
-	B5_DDR &= ~(1 << B5);
-	B5_PORT |= (1 << B5);
+	// B5_DDR &= ~(1 << B5);
+	// B5_PORT |= (1 << B5);
+	//B5_DDR |= (1 << B5); //UART
 	
 	B6_DDR &= ~(1 << B6);
 	B6_PORT |= (1 << B6);
@@ -33,7 +35,7 @@ void button_init()
 	PCICR |= (1 << PCIE2) | (1 << PCIE0); // Enable Pin change interrupts
 	//Select triggers for PCINTs
 	PCMSK0 |= (1 << PCINT6);
-	PCMSK2 |= (1 << PCINT22) | (1 << PCINT21) | (1 << PCINT20) | (1 << PCINT19) | (1 << PCINT17) | (1 << PCINT16);
+	PCMSK2 |= (1 << PCINT22) | (1 << PCINT21) | (1 << PCINT20) | (1 << PCINT19); //| (1 << PCINT17) | (1 << PCINT16);
 	power_flag = 1;
 	
 }
@@ -53,9 +55,6 @@ ISR(INT1_vect) //TOP (Power Button) INT
 		_delay_ms(5);
 		power_flag = 1;	
 	}
-	ADCSRA |= (1 << ADIE);
-	ADCSRA |= (1 << ADEN);
-	ADCSRA |= (1 << ADSC);
 }
 
 ISR(PCINT0_vect)
@@ -151,8 +150,7 @@ ISR(PCINT2_vect)
 
 void power_down()
 {
-	ADCSRA &= ~(1 << ADIE);
-	ADCSRA &= ~(1 << ADEN);
+	
 	PCICR &= ~(1 << PCIE2) & ~(1 << PCIE0); // disable PCINT
 	EIMSK |= (1 << INT1); // Enebale INT1 external interrupt on low state
 	power_flag = 0;
