@@ -37,6 +37,18 @@ ISR(TIMER0_COMPA_vect)
 		blinker = 0;
 	}
 	
+	if (theft_btn >0)
+	{
+		if (!((B2_PIN) & (1 << B2))) theft_btn ++;
+		else 
+		{
+			theft_btn = 0;
+			send(4, 0, 0x02);
+			send(4, 1, 0x02);
+			send(4, 2, 0x02);
+			send(4, 3, 0x02);
+		}
+	}
 	
 	if (power_btn > 0)
 	{
@@ -81,6 +93,15 @@ ISR(TIMER0_COMPA_vect)
 				ADCSRA &= ~(1 << ADEN);
 			}
 		}
+	}
+	
+	if (theft_btn == T1S)
+	{
+		theft_btn = 0;
+		send(4, 0, 0x01);
+		send(4, 1, 0x01);
+		send(4, 2, 0x01);
+		send(4, 3, 0x01);
 	}
 	
 	if (power_btn == T1S)

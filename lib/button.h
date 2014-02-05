@@ -10,6 +10,7 @@
 volatile extern unsigned char power_btn;
 volatile extern char func_btn;
 extern volatile int power_flag;
+extern volatile unsigned char theft_btn;
 
 volatile extern char function;
 volatile unsigned extern int func_timer;

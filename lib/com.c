@@ -77,7 +77,7 @@ void send(uint8_t c, uint8_t dev, uint8_t param)
 
 			rfm12_tx(6, 0, command);
 		break;
-		case 2:
+		case 2: //odpytanie
 			command[0] = 0xFF;
 			command[1] = id_tab[dev][0];
 			command[2] = id_tab[dev][1];
@@ -88,7 +88,7 @@ void send(uint8_t c, uint8_t dev, uint8_t param)
 			rfm12_tx(6, 0, command);
 		break;
 		
-		case 3:
+		case 3: // przesłanie nastaw
  			command[0] = 0xFF;
  			command[1] = id_tab[dev][0];
  			command[2] = id_tab[dev][1];
@@ -97,6 +97,15 @@ void send(uint8_t c, uint8_t dev, uint8_t param)
  			command[5] = param;
   			rfm12_tx(6, 0, command);
   		break;
+		 
+		case 4: //alarm!
+			command[0] = 0xFF;
+ 			command[1] = id_tab[dev][0];
+ 			command[2] = id_tab[dev][1];
+ 			command[3] = id_tab[dev][2];
+ 			command[4] = 0x0B;
+ 			command[5] = param;
+  			rfm12_tx(6, 0, command);
   	}
 
 }

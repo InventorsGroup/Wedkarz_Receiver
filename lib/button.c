@@ -6,6 +6,7 @@ volatile int power_flag;
 volatile char main_mode;
 volatile char function = 2;
 volatile unsigned char pwr;
+volatile unsigned char theft_btn;
 
 void button_init()
 {
@@ -40,19 +41,8 @@ void button_init()
 
 ISR(INT1_vect) //TOP (Power Button) INT
 {
-	power_up();
+	//power_up();
 	//led_enable(0);
-	_delay_ms(100);
-	if (((B1_PIN & (1 << B1)) ) !=0 ) 
-	{
-		power_flag = 0;
-	}
-	else 
-	{
-		led_enable(1);
-		_delay_ms(5);
-		power_flag = 1;	
-	}
 }
 
 ISR(PCINT0_vect)
@@ -140,7 +130,7 @@ ISR(PCINT2_vect)
 		}	
 		else if ((B2_PIN & (1 << B2)) == 0)
 		{
-
+			theft_btn = 1;
 		}
 		led_push();
 	}
@@ -148,19 +138,36 @@ ISR(PCINT2_vect)
 
 void power_down()
 {
-	
+	cli();
 	PCICR &= ~(1 << PCIE2) & ~(1 << PCIE0); // disable PCINT
 	EIMSK |= (1 << INT1); // Enebale INT1 external interrupt on low state
 	power_flag = 0;
 	led_enable(0);
+	while (!(B1_PIN & (1 << B1)));
 	SMCR |= (1 << SM1) |(1 << SE);
+	sleep_enable();
+	sei();
 	sleep_cpu();
+	
+	power_up();
+	_delay_ms(100);
+	if (((B1_PIN & (1 << B1)) ) !=0 ) 
+	{
+		power_flag = 0;
+	}
+	else 
+	{
+		led_enable(1);
+		_delay_ms(5);
+		power_flag = 1;	
+	}
 }
 
 void power_up()
 {
+		sleep_disable();
+		led_set(9,1);
 		power_flag = 1;
-		SMCR = 0;
 		EIMSK &= ~(1 << INT1); //disable INT1
 		PCICR |= (1 << PCIE2) | (1 << PCIE0); // enable PCINT
 		sei();
