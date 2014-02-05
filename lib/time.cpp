@@ -20,14 +20,6 @@ volatile unsigned char d = 0;
 volatile unsigned char blinker = 0;
 unsigned volatile int sender = 0; //USART
 
-void uart_putc(uint8_t data)
-{
-	// Oczekiwanie na zakończenie nadawania
-	while (!(UCSR0A & (1 << UDRE0)));
- 
-	// Wysłanie danych
-	UDR0 = data;
-}
 
 void time_init()
 {
@@ -45,13 +37,6 @@ ISR(TIMER0_COMPA_vect)
 		blinker = 0;
 	}
 	
-	// if (sender == 20)
-	// {
-		// sender = 0;
-		// uart_putc(rnd[0]);
-		// uart_putc(rnd[1]);
-		// uart_putc(rnd[2]);
-	// }
 	
 	if (power_btn > 0)
 	{
@@ -88,9 +73,6 @@ ISR(TIMER0_COMPA_vect)
 				id_temp[0] = rnd[0];
 				id_temp[1] = rnd[1];
 				id_temp[2] = rnd[2];
-				uart_putc(rnd[0]);
-				uart_putc(rnd[1]);
-				uart_putc(rnd[2]);
 				wait_for_pair = 1;
 			}
 			else
@@ -118,9 +100,6 @@ ISR(TIMER0_COMPA_vect)
 			id_temp[0] = rnd[0];
 			id_temp[1] = rnd[1];
 			id_temp[2] = rnd[2];
-			uart_putc(rnd[0]);
-			uart_putc(rnd[1]);
-			uart_putc(rnd[2]);
 			wait_for_pair = 1;
 			func_mode = 1;
 			function = 2;

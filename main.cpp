@@ -25,21 +25,6 @@ void adc_init(void)
 	ADCSRA  |=  (1<<ADATE); 
 }
 
-void uart_init(uint16_t ubrr)
-{
-	// Ustawienie prędkości transmisji
-	UBRR0H = (uint8_t)(ubrr >> 8);
-	UBRR0L = (uint8_t)ubrr;
- 
-	// Włączenie nadajnika i odbiornika
-	UCSR0B = (1 << RXEN0) | (1 << TXEN0);
- 
-	// Ustawienie formatu ramki:
-	// 8 bitów danych, 1 bit stopu, brak parzystości
-	UCSR0C = (1 << UCSZ00) | (1 << UCSZ01);
-}
-
-
 
 int main(void) 
  {  
@@ -49,7 +34,6 @@ int main(void)
 	time_init();
 	rfm12_init();
 	speaker_init();
-	uart_init(26);
 
 	sei();
 
