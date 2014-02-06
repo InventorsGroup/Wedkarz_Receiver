@@ -53,6 +53,26 @@ void parse(uint8_t *data)
 					case 0x01:
 						bite[k] = 1;
 						bite_type[k] = data[5];
+						bite_type[k] &= 0x03;
+						data[5] = (data[5] >> 2);
+						VOL = data[5];
+						VOL &= 0x07;
+						VOL-=1;
+						data[5] = (data[5] >> 3);
+						SPK_FREQ = data[5];
+					break;
+					
+					case 0x02:
+						if (data[5] == 0x01) main_mode = -1;
+						else 
+						{
+							main_mode = 2;
+							led_set(0,0);
+							led_set(1,0);
+							led_set(2,0);
+							led_set(3,0);
+							set_speaker(0);	
+						}
 					break;
 				}
 				

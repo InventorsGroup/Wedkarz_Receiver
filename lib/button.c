@@ -130,7 +130,8 @@ ISR(PCINT2_vect)
 		}	
 		else if ((B2_PIN & (1 << B2)) == 0)
 		{
-			theft_btn = 1;
+			_delay_ms(10);
+			if ((func_mode == 0) && ((main_mode > 1) || (main_mode == -1))) theft_btn = 1;
 		}
 		led_push();
 	}
@@ -150,7 +151,7 @@ void power_down()
 	sleep_cpu();
 	
 	power_up();
-	_delay_ms(100);
+	_delay_ms(500);
 	if (((B1_PIN & (1 << B1)) ) !=0 ) 
 	{
 		power_flag = 0;
@@ -160,6 +161,9 @@ void power_down()
 		led_enable(1);
 		_delay_ms(5);
 		power_flag = 1;	
+		SPK_FREQ = 3;
+		VOL = 3;
+		play_speaker(200);
 	}
 }
 

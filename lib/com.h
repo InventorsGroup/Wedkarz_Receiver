@@ -6,6 +6,7 @@
 
 #include "rfm12.h"
 #include "led.h"
+#include "speaker.h"
 
 volatile unsigned extern char wait_for_pair;
 

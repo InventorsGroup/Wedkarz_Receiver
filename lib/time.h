@@ -7,12 +7,13 @@
 #include "led.h"
 #include "rfm12.h"
 #include "com.h"
+#include "speaker.h"
 
 uint8_t losuj();
 
 extern volatile unsigned int t1s;
 extern volatile unsigned int t10s;
-extern volatile unsigned char state;
+extern volatile char state;
 
 extern volatile int a;
 extern volatile int b;

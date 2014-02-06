@@ -6,6 +6,7 @@
 #include "../config.h"
 #include "led.h"
 #include "com.h"
+#include "speaker.h"
 
 volatile extern unsigned char power_btn;
 volatile extern char func_btn;

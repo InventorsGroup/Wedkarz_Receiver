@@ -15,11 +15,15 @@ volatile unsigned int t500ms = 0;
 volatile int fb_led = -1;
 volatile unsigned char bite_blink = 0;
 
-volatile unsigned char state = -1;
+volatile char state = -1;
 volatile unsigned char d = 0;
 volatile unsigned char blinker = 0;
 unsigned volatile int sender = 0; //USART
-
+unsigned volatile char send_theft = 0;
+unsigned volatile char cnt = 0;
+unsigned volatile char cnt2 = 0;
+unsigned volatile int spk_tmp = 0;
+unsigned volatile char cnt3=0;
 
 void time_init()
 {
@@ -31,22 +35,53 @@ void time_init()
 
 ISR(TIMER0_COMPA_vect)
 {
+
+	if(spk_cnt > 0)
+	{
+		spk_tmp++;
+		if(spk_tmp > spk_cnt)
+		{
+			set_speaker(0);
+			spk_tmp = 0;
+			spk_cnt = 0;
+		}
+	}
+	
 	if (blinker == T250MS)
 	{
 		state*=-1;
 		blinker = 0;
 	}
 	
+	if (send_theft > 0)
+	{
+		cnt++;
+		if (cnt == 20)
+		{
+			send(4, cnt2, send_theft);
+			cnt = 0;
+			cnt2++;
+		}
+		if(cnt2 > 3)
+		{
+			cnt2 = 0;
+			send_theft = 0;
+		}
+	}
+	
 	if (theft_btn >0)
 	{
 		if (!((B2_PIN) & (1 << B2))) theft_btn ++;
-		else 
+		else
 		{
+			send_theft = 2;
 			theft_btn = 0;
-			send(4, 0, 0x02);
-			send(4, 1, 0x02);
-			send(4, 2, 0x02);
-			send(4, 3, 0x02);
+			main_mode = 2;
+			led_set(0,0);
+			led_set(1,0);
+			led_set(2,0);
+			led_set(3,0);
+			set_speaker(0);	
 		}
 	}
 	
@@ -98,10 +133,7 @@ ISR(TIMER0_COMPA_vect)
 	if (theft_btn == T1S)
 	{
 		theft_btn = 0;
-		send(4, 0, 0x01);
-		send(4, 1, 0x01);
-		send(4, 2, 0x01);
-		send(4, 3, 0x01);
+		send_theft = 1;
 	}
 	
 	if (power_btn == T1S)
