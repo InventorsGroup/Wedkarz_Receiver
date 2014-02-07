@@ -71,7 +71,7 @@
 //#define DATARATE_VALUE RFM12_DATARATE_CALC_HIGH(9600.0)
 
 //use this for 340 Baud < datarate < 2700 Baud
-#define DATARATE_VALUE RFM12_DATARATE_CALC_LOW(1200.0)
+#define DATARATE_VALUE RFM12_DATARATE_CALC_LOW(1400.0)
 
 /**** TX BUFFER SIZE
  */
@@ -120,7 +120,7 @@ This is a bitmask that defines how "rude" this library behaves
 /* control rate, frequency, etc during runtime
  * this setting will certainly add a bit code
  **/
-#define RFM12_LIVECTRL 1
+#define RFM12_LIVECTRL 0
 #define RFM12_NORETURNS 0
 #define RFM12_USE_WAKEUP_TIMER 0
 #define RFM12_TRANSMIT_ONLY 0

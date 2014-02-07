@@ -35,9 +35,8 @@ int main(void)
 	time_init();
 	rfm12_init();
 	speaker_init();
-
 	sei();
-	VOL = 3;
+	VOL = 3; // Wczytać z eepromu
 	power_up();
 	power_down();
 	
@@ -143,6 +142,13 @@ int main(void)
 				led_set(5, 0);
 				led_set(6, 0);
 				
+				if (play_vol == 1)
+				{
+					SPK_FREQ = 2;
+					play_speaker(100);
+					play_vol = 0;
+				}
+				
 				if (main_mode == 1)
 				{
 					led_set(11,0);
@@ -159,26 +165,26 @@ int main(void)
 				if (main_mode == 2) led_set(7,1);
 				else led_set (7,0);
 
-				if (main_mode > 1)
-				{
-					for(int i = 0; i < 4; i++)
-					{
-						if (bite[i] > 0)
-						{
-							if ((state == 1) && (spk_temp == 0))
-							{
-								if (bite_type[i] == 2) play_speaker(50);
-								else if (bite_type[i] == 1) play_speaker_alt(50);
+				// if (main_mode > 1)
+				// {
+					// for(int i = 0; i < 4; i++)
+					// {
+						// if (bite[i] > 0)
+						// {
+							// if ((state == 1) && (spk_temp == 0))
+							// {
+								// if (bite_type[i] == 2) play_speaker(50);
+								// else if (bite_type[i] == 1) play_speaker_alt(50);
 								
-								spk_temp = 1;
-							}
-							if (state == -1)
-							{
-								spk_temp = 0;
-							}
-						}
-					}
-				}
+								// spk_temp = 1;
+							// }
+							// if (state == -1)
+							// {
+								// spk_temp = 0;
+							// }
+						// }
+					// }
+				// }
 			}
 			cli();
 			rfm12_poll();

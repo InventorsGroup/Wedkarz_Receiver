@@ -7,6 +7,7 @@ volatile char main_mode;
 volatile char function = 2;
 volatile unsigned char pwr;
 volatile unsigned char theft_btn;
+volatile unsigned char play_vol = 0;
 
 void button_init()
 {
@@ -73,6 +74,7 @@ ISR(PCINT2_vect)
 		}
 		if ((B4_PIN & (1 << B4)) == 0)
 		{	
+			while (!(B4_PIN & (1 << B4)));
 			func_timer = 0;
  			if (func_mode == 1)
  			{
@@ -89,9 +91,16 @@ ISR(PCINT2_vect)
  						break;
  				}
  			}
+			else
+			{
+				if (VOL > -1) VOL--;
+				else VOL = -1;
+				play_vol = 1;
+			}
 		}
 		else if ((B5_PIN & (1 << B5)) == 0)
 		{
+			while (!(B5_PIN & (1 << B5)));
 			func_timer = 0;
  			if (func_mode == 1)
  			{
@@ -108,6 +117,12 @@ ISR(PCINT2_vect)
  						break;
  				}
  			}
+			else
+			{
+				if (VOL < 4) VOL++;
+				else VOL = 4;
+				play_vol = 1;
+			}
 		}
 		
 		else if ((B6_PIN & (1 << B6)) == 0)
@@ -137,7 +152,7 @@ ISR(PCINT2_vect)
 	}
 }
 
-void power_down()
+void power_down() //dodać zapis do eepromu
 {
 	cli();
 	PCICR &= ~(1 << PCIE2) & ~(1 << PCIE0); // disable PCINT

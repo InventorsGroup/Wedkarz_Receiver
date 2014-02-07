@@ -15,6 +15,7 @@ extern volatile unsigned char theft_btn;
 
 volatile extern char function;
 volatile unsigned extern int func_timer;
+volatile unsigned extern char play_vol;
 
 
 

@@ -50,16 +50,14 @@ void parse(uint8_t *data)
 						contact[k] = 1;
 					break;
 					
-					case 0x01:
+					case 0x01: // branie
 						bite[k] = 1;
 						bite_type[k] = data[5];
 						bite_type[k] &= 0x03;
 						data[5] = (data[5] >> 2);
-						VOL = data[5];
-						VOL &= 0x07;
-						VOL-=1;
-						data[5] = (data[5] >> 3);
 						SPK_FREQ = data[5];
+						if (bite_type[k] == 1) play_speaker_alt(50);
+						else play_speaker(50);
 					break;
 					
 					case 0x02:
