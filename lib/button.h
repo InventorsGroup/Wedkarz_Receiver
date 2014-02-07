@@ -2,6 +2,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
+#include <avr/eeprom.h>
 
 #include "../config.h"
 #include "led.h"

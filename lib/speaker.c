@@ -11,6 +11,25 @@ unsigned volatile char ACTUAL_FREQ = 100;
 unsigned volatile char ACTUAL_VOL = 90;
 volatile unsigned char THEFT_ALARM = 0;
 
+void vib_init()
+{
+	DDRB |= (1 << PB7);
+}
+
+void set_vib(unsigned char state)
+{
+	if (state > 0 )
+	{
+		PORTB |= (1 << PB7);
+		vib = 1;
+	}
+	else
+	{	
+		PORTB &= ~(1 << PB7);
+		vib = 0;
+	}
+}
+
 void speaker_init()
 {	
 	//TCCR2B |= (1 << CS22);
@@ -24,6 +43,8 @@ void set_speaker(char state)
 {
 	if(state > 0)
 	{
+		if (VOL < 1) set_vib(1);
+		else set_vib(0);
 		TCCR2B |= (1 << CS22);
 	}
 	else if(state == 0)
@@ -40,6 +61,7 @@ void play_speaker(int length)
 {
 	if(((TIME > 1 && silent_time > 0) || VOL == -1) &&  THEFT_ALARM == 0)
 	{
+		set_vib(1);
 		return;
 	}
 

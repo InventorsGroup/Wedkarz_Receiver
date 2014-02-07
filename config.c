@@ -1,4 +1,4 @@
-volatile unsigned char id_tab[5][3] = {{0,0,0},
+volatile unsigned char id_tab[4][3] = {{0,0,0},
 									   {0,0,0},
 									   {0,0,0},
 									   {0,0,0}};
@@ -13,3 +13,4 @@ volatile unsigned int func_timer;
 volatile char func_mode = 0;
 volatile unsigned char rnd[3] = {0,0,0};
 volatile unsigned char theft[4] = {0,0,0,0};
+volatile unsigned char vib = 0;

@@ -56,8 +56,11 @@ void parse(uint8_t *data)
 						bite_type[k] &= 0x03;
 						data[5] = (data[5] >> 2);
 						SPK_FREQ = data[5];
-						if (bite_type[k] == 1) play_speaker_alt(50);
-						else play_speaker(50);
+						// if (main_mode > 1)
+						// {
+							if (bite_type[k] == 1) play_speaker_alt(50);
+							else play_speaker(50);
+						// }
 					break;
 					
 					case 0x02:

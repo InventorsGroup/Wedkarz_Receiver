@@ -34,9 +34,10 @@ int main(void)
 	button_init();
 	time_init();
 	rfm12_init();
+	vib_init();
+	// set_vib(1);
 	speaker_init();
 	sei();
-	VOL = 3; // Wczytać z eepromu
 	power_up();
 	power_down();
 	
@@ -144,10 +145,12 @@ int main(void)
 				
 				if (play_vol == 1)
 				{
-					SPK_FREQ = 2;
+					SPK_FREQ = 1;
 					play_speaker(100);
 					play_vol = 0;
 				}
+				
+				
 				
 				if (main_mode == 1)
 				{

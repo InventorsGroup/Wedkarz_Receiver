@@ -1,6 +1,7 @@
 #include <avr/io.h> 
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include "../config.h"
 
 void speaker_init();
 ISR(TIMER2_COMPA_vect);
@@ -15,3 +16,6 @@ extern unsigned volatile char SPK_FREQ;
 extern volatile char VOL;
 extern unsigned volatile char spk_cnt;
 extern volatile unsigned char THEFT_ALARM;
+
+void vib_init();
+void set_vib(unsigned char state);

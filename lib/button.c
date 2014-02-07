@@ -154,6 +154,24 @@ ISR(PCINT2_vect)
 
 void power_down() //dodać zapis do eepromu
 {
+	eeprom_write_byte((uint8_t*)0, (uint8_t)VOL); // Save volume to eeprom
+	
+	eeprom_write_byte((uint8_t*)8, (uint8_t)id_tab[0][0]);
+	eeprom_write_byte((uint8_t*)16, (uint8_t)id_tab[0][1]);
+	eeprom_write_byte((uint8_t*)24, (uint8_t)id_tab[0][2]);
+	
+	eeprom_write_byte((uint8_t*)32, (uint8_t)id_tab[1][0]);
+	eeprom_write_byte((uint8_t*)40, (uint8_t)id_tab[1][1]);
+	eeprom_write_byte((uint8_t*)48, (uint8_t)id_tab[1][2]);
+	
+	eeprom_write_byte((uint8_t*)56, (uint8_t)id_tab[2][0]);
+	eeprom_write_byte((uint8_t*)64, (uint8_t)id_tab[2][1]);
+	eeprom_write_byte((uint8_t*)72, (uint8_t)id_tab[2][2]);
+	
+	eeprom_write_byte((uint8_t*)80, (uint8_t)id_tab[3][0]);
+	eeprom_write_byte((uint8_t*)88, (uint8_t)id_tab[3][1]);
+	eeprom_write_byte((uint8_t*)96, (uint8_t)id_tab[3][2]);
+	
 	cli();
 	PCICR &= ~(1 << PCIE2) & ~(1 << PCIE0); // disable PCINT
 	EIMSK |= (1 << INT1); // Enebale INT1 external interrupt on low state
@@ -189,6 +207,24 @@ void power_up()
 		power_flag = 1;
 		EIMSK &= ~(1 << INT1); //disable INT1
 		PCICR |= (1 << PCIE2) | (1 << PCIE0); // enable PCINT
+		VOL = eeprom_read_byte((uint8_t*)0);
+		
+		id_tab[0][0] = eeprom_read_byte((uint8_t*)8);
+		id_tab[0][1] = eeprom_read_byte((uint8_t*)16);
+		id_tab[0][2] = eeprom_read_byte((uint8_t*)24);
+		
+		id_tab[1][0] = eeprom_read_byte((uint8_t*)32);
+		id_tab[1][1] = eeprom_read_byte((uint8_t*)40);
+		id_tab[1][2] = eeprom_read_byte((uint8_t*)48);
+		
+		id_tab[2][0] = eeprom_read_byte((uint8_t*)56);
+		id_tab[2][1] = eeprom_read_byte((uint8_t*)64);
+		id_tab[2][2] = eeprom_read_byte((uint8_t*)72);
+		
+		id_tab[3][0] = eeprom_read_byte((uint8_t*)80);
+		id_tab[3][1] = eeprom_read_byte((uint8_t*)88);
+		id_tab[3][2] = eeprom_read_byte((uint8_t*)96);
+		
 		sei();
 		main_mode = 0;
 		func_mode = 0;

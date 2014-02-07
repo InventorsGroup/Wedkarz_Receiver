@@ -22,7 +22,7 @@ OBJECTS    += $(LIBDIR)/speaker.o
 OBJECTS    += $(LIBDIR)/rfm12.o
 OBJECTS    += $(LIBDIR)/com.o
 
-FUSES      = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xff:m
+FUSES      = -U lfuse:w:0xe2:m -U hfuse:w:0xd7:m -U efuse:w:0xf9:m
 
 # Tune the lines below only if you know what you are doing:
 
