@@ -48,6 +48,7 @@ ISR(INT1_vect) //TOP (Power Button) INT
 
 ISR(PCINT0_vect)
 {
+	sleep = 0;
 	char mask = (1 << B3);
 	_delay_ms(10);
 	if ((PINB & mask) != mask)
@@ -60,7 +61,7 @@ ISR(PCINT0_vect)
 ISR(PCINT2_vect)
 {
 	char mask = 0;
-	
+	sleep = 0;
 	mask |= (1 << B1) | (1 << B2) | (1 << B4) | (1 << B5) | (1 << B6) | (1 << B7);
 	_delay_ms(2);
 	if ((PIND & mask) != mask)
@@ -184,7 +185,7 @@ void power_down() //dodać zapis do eepromu
 	sleep_cpu();
 	
 	power_up();
-	_delay_ms(500);
+	_delay_ms(50);
 	if (((B1_PIN & (1 << B1)) ) !=0 ) 
 	{
 		power_flag = 0;
@@ -195,7 +196,6 @@ void power_down() //dodać zapis do eepromu
 		_delay_ms(5);
 		power_flag = 1;	
 		SPK_FREQ = 3;
-		VOL = 3;
 		play_speaker(200);
 	}
 }

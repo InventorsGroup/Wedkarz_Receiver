@@ -23,8 +23,9 @@ void parse(uint8_t *data)
 				
 				if ((data[1] == id_temp[0]) && (data[2] == id_temp[1]) &&(data[3] == id_temp[2]))
 				{
-					led_set(12,z);
-					z*=-1;
+					led_set(12,1);
+					_delay_ms(100);
+					led_set(12,0);
 					color[device] = data[5];
 					id_tab[device][0] = id_temp[0];
 					id_tab[device][1] = id_temp[1];
@@ -43,6 +44,7 @@ void parse(uint8_t *data)
 			
 			if (known_id !=0)
 			{
+				sleep = 0;
 				switch (data[4]) //wywołanie ze strony sygnalizatora
 				{
 					case 0x03: 

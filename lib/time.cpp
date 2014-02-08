@@ -3,6 +3,7 @@
 #define T1S 30
 #define T2S 80
 #define T10S 500
+#define TSLEEP 2000
 #define T20S 50
 #define T250MS 7
 #define T500MS 15
@@ -194,6 +195,7 @@ ISR(TIMER0_COMPA_vect)
 			eeprom_write_byte((uint8_t*)88, (uint8_t)id_tab[3][1]);
 			eeprom_write_byte((uint8_t*)96, (uint8_t)id_tab[3][2]);
 	
+			sleep = 0;
 			func_mode = 0;
 			wait_for_pair = 0;
 			led_set(0,0);
@@ -222,6 +224,7 @@ ISR(TIMER0_COMPA_vect)
 	{
 		if (func_mode == 1)
 		{
+			sleep = 0;
 			func_mode =0;
 			wait_for_pair = 0;
 			led_set(0,0);
@@ -267,10 +270,10 @@ ISR(TIMER0_COMPA_vect)
 				}
 				if (bite[i] > 0)
 				{
-					led_set(i, state*color[i]);
+					led_set(i, color[i]);
 					if (bite_type[i] == 1)
 					{
-						led_set(11,1);
+						led_set(11,state*1);
 						led_set(12,0);
 					}
 					else
@@ -308,7 +311,14 @@ ISR(TIMER0_COMPA_vect)
 			contact[i] = 0;
 		}	
 	}
+	
+	if (sleep > TSLEEP)
+	{
+		sleep_mode = 1;
+	}
 
+	if (func_mode == 0) sleep++;
+	
 	led_counter++;
 	bite_blink++;
 	

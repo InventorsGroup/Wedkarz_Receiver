@@ -47,8 +47,12 @@ int main(void)
 		
 		if (power_flag == 0)
 		{		
-
 			power_down();
+		}
+		else if (sleep_mode == 1)
+		{
+			sleep_mode = 0;
+			//go to sleep
 		}
 		else
 		{

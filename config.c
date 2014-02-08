@@ -14,3 +14,5 @@ volatile char func_mode = 0;
 volatile unsigned char rnd[3] = {0,0,0};
 volatile unsigned char theft[4] = {0,0,0,0};
 volatile unsigned char vib = 0;
+volatile unsigned int sleep = 0;
+volatile unsigned char sleep_mode = 0;
