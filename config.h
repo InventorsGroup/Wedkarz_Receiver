@@ -3,22 +3,7 @@
 	LED Control PINs, PORTs and DDRs
 */
 
-volatile extern unsigned char id_tab[4][3];
-volatile extern unsigned char color[4];
-volatile unsigned extern char device;
-volatile unsigned extern char id_temp[3];
-volatile unsigned extern int bite[4];
-volatile unsigned extern char bite_type[4];
-volatile unsigned extern char contact[4];
-volatile unsigned extern int led_counter;
-extern volatile char main_mode;
-extern volatile char func_mode;
-extern volatile unsigned int func_timer;
-volatile extern unsigned char rnd[3];
-volatile unsigned extern char theft [4];
-volatile unsigned extern char vib;
-volatile extern unsigned int sleep;
-volatile extern unsigned char sleep_mode;
+volatile unsigned extern int bite;
 
 //led drivers
 #define SDI_PORT PORTC	
