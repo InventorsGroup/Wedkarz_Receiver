@@ -78,6 +78,7 @@ void play_speaker_alt(int length)
 {
 	if(((TIME > 1 && silent_time > 0) || VOL == -1) &&  THEFT_ALARM == 0)
 	{
+		set_vib(1);
 		return;
 	}
 

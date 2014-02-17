@@ -42,12 +42,12 @@ ISR(TIMER0_COMPA_vect)
 	{
 		vib++;
 	}
-	
+
 	if (vib == TVIB)
 	{
 		set_vib(0);
 	}
-	
+
 	if(spk_cnt > 0)
 	{
 		spk_tmp++;
@@ -58,13 +58,13 @@ ISR(TIMER0_COMPA_vect)
 			spk_cnt = 0;
 		}
 	}
-	
+
 	if (blinker == T250MS)
 	{
 		state*=-1;
 		blinker = 0;
 	}
-	
+
 	if (send_theft > 0)
 	{
 		cnt++;
@@ -80,7 +80,7 @@ ISR(TIMER0_COMPA_vect)
 			send_theft = 0;
 		}
 	}
-	
+
 	if (theft_btn >0)
 	{
 		if (!((B2_PIN) & (1 << B2))) theft_btn ++;
@@ -93,13 +93,13 @@ ISR(TIMER0_COMPA_vect)
 			led_set(1,0);
 			led_set(2,0);
 			led_set(3,0);
-			set_speaker(0);	
+			set_speaker(0);
 		}
 	}
-	
+
 	if (power_btn > 0)
 	{
-		if (!(B1_PIN & (1 << B1))) power_btn++;	
+		if (!(B1_PIN & (1 << B1))) power_btn++;
 		else
 		{
 			power_btn = 0;
@@ -120,7 +120,7 @@ ISR(TIMER0_COMPA_vect)
 		ADCSRA |= (1 << ADIE);
 		ADCSRA |= (1 << ADEN);
 		ADCSRA |= (1 << ADSC);
-		if (!(B3_PIN & (1 << B3))) func_btn++;	
+		if (!(B3_PIN & (1 << B3))) func_btn++;
 		else
 		{
 			func_btn = 0;
@@ -137,29 +137,30 @@ ISR(TIMER0_COMPA_vect)
 			else
 			{
 				ADCSRA &= ~(1 << ADIE);
-				ADCSRA &= ~(1 << ADEN);
+				ADCSRA &= ~(1 << ADEN),
+				DIDR0 = 0;
 			}
 		}
 	}
-	
+
 	if (theft_btn == T1S)
 	{
 		theft_btn = 0;
 		send_theft = 1;
 	}
-	
+
 	if (power_btn == T1S)
 	{
 		power_btn = 0;
 		power_flag = 0;
 	}
 	else power_flag = 1;
-	
+
 	if (func_btn == T1S)
 	{
 		func_btn = 0;
 		if (func_mode == 0)
-		{	
+		{
 			func_timer = 0;
 			device = 0;
 			id_temp[0] = rnd[0];
@@ -168,33 +169,33 @@ ISR(TIMER0_COMPA_vect)
 			wait_for_pair = 1;
 			func_mode = 1;
 			function = 2;
-			
+
 			for (int i = 0; i < 4; i++)
 			{
 				bite[i] = 0;
 				led_set(11,0);
 				led_set(12,0);
 				led_set (i,0);
-			}	
+			}
 		}
-		else 
+		else
 		{
 			eeprom_write_byte((uint8_t*)8, (uint8_t)id_tab[0][0]);
 			eeprom_write_byte((uint8_t*)16, (uint8_t)id_tab[0][1]);
 			eeprom_write_byte((uint8_t*)24, (uint8_t)id_tab[0][2]);
-			
+
 			eeprom_write_byte((uint8_t*)32, (uint8_t)id_tab[1][0]);
 			eeprom_write_byte((uint8_t*)40, (uint8_t)id_tab[1][1]);
 			eeprom_write_byte((uint8_t*)48, (uint8_t)id_tab[1][2]);
-			
+
 			eeprom_write_byte((uint8_t*)56, (uint8_t)id_tab[2][0]);
 			eeprom_write_byte((uint8_t*)64, (uint8_t)id_tab[2][1]);
 			eeprom_write_byte((uint8_t*)72, (uint8_t)id_tab[2][2]);
-			
+
 			eeprom_write_byte((uint8_t*)80, (uint8_t)id_tab[3][0]);
 			eeprom_write_byte((uint8_t*)88, (uint8_t)id_tab[3][1]);
 			eeprom_write_byte((uint8_t*)96, (uint8_t)id_tab[3][2]);
-	
+
 			sleep = 0;
 			func_mode = 0;
 			wait_for_pair = 0;
@@ -207,8 +208,8 @@ ISR(TIMER0_COMPA_vect)
 			ADCSRA &= ~(1 << ADEN);
 		}
 	}
-	
-	
+
+
 	 if (t500ms == T500MS)
 	 {
 		if (func_mode == 1)
@@ -216,10 +217,10 @@ ISR(TIMER0_COMPA_vect)
 			fb_led *= -1;
 			send(1, 0, 0);
 		}
-		
+
 		t500ms = 0;
 	 }
-	
+
 	if (func_timer == T10S)
 	{
 		if (func_mode == 1)
@@ -232,26 +233,26 @@ ISR(TIMER0_COMPA_vect)
 			led_set(2,0);
 			led_set(3,0);
 			led_set(10, 0);
-			
+
 			ADCSRA &= ~(1 << ADIE);
 			ADCSRA &= ~(1 << ADEN);
-			
+
 			eeprom_write_byte((uint8_t*)8, (uint8_t)id_tab[0][0]);
 			eeprom_write_byte((uint8_t*)16, (uint8_t)id_tab[0][1]);
 			eeprom_write_byte((uint8_t*)24, (uint8_t)id_tab[0][2]);
-			
+
 			eeprom_write_byte((uint8_t*)32, (uint8_t)id_tab[1][0]);
 			eeprom_write_byte((uint8_t*)40, (uint8_t)id_tab[1][1]);
 			eeprom_write_byte((uint8_t*)48, (uint8_t)id_tab[1][2]);
-			
+
 			eeprom_write_byte((uint8_t*)56, (uint8_t)id_tab[2][0]);
 			eeprom_write_byte((uint8_t*)64, (uint8_t)id_tab[2][1]);
 			eeprom_write_byte((uint8_t*)72, (uint8_t)id_tab[2][2]);
-			
+
 			eeprom_write_byte((uint8_t*)80, (uint8_t)id_tab[3][0]);
 			eeprom_write_byte((uint8_t*)88, (uint8_t)id_tab[3][1]);
 			eeprom_write_byte((uint8_t*)96, (uint8_t)id_tab[3][2]);
-			
+
 		}
 	}
 
@@ -287,7 +288,7 @@ ISR(TIMER0_COMPA_vect)
 		}
 		bite_blink = 0;
 	}
-	
+
 	if (contact_counter == T500MS)
 	{
 		if ((main_mode == 1) && (func_mode == 0))
@@ -298,8 +299,8 @@ ISR(TIMER0_COMPA_vect)
 		}
 		contact_counter = 0;
 	}
-	
-	
+
+
 	for (int i = 0; i < 4; i++)
 	{
 		if (contact[i] > 0)
@@ -309,27 +310,26 @@ ISR(TIMER0_COMPA_vect)
 		if (contact[i] >= T2S)
 		{
 			contact[i] = 0;
-		}	
+		}
 	}
-	
+
 	if (sleep > TSLEEP)
 	{
 		sleep_mode = 1;
 	}
 
 	if (func_mode == 0) sleep++;
-	
+
 	led_counter++;
 	bite_blink++;
-	
+
 	led_push();
 	contact_counter++;
 	t10s++;
 	t500ms++;
 	blinker++;
 	func_timer++;
-	
+
 	sender++; //USART
-	
 }
 
