@@ -195,7 +195,7 @@ void power_down() //dodać zapis do eepromu
 		led_enable(1);
 		_delay_ms(5);
 		power_flag = 1;
-		SPK_FREQ = 2;
+		SPK_FREQ = 4;
 		cli();
 		play_speaker(50);
 		sei();

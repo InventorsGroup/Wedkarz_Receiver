@@ -85,10 +85,8 @@ void play_speaker_alt(int length)
 	if(spk_cnt != 0)
 		return;
 	
-		if(SPK_FREQ == 0)
+	
 			ACTUAL_FREQ = freq_tab[SPK_FREQ+1];
-		else
-			ACTUAL_FREQ = freq_tab[SPK_FREQ-1];
 
 		ACTUAL_VOL = vol_tab[VOL];
 		set_speaker(1);
